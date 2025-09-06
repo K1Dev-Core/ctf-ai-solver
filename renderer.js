@@ -3,6 +3,7 @@ const OpenAI = require('openai');
 
 let openai = null;
 let currentFile = null;
+let selectedModel = 'auto';
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
@@ -12,11 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initializeApp() {
     const apiKey = localStorage.getItem('openai_api_key');
+    const savedModel = localStorage.getItem('selected_model');
+    
     if (apiKey) {
         openai = new OpenAI({ 
             apiKey: apiKey,
             dangerouslyAllowBrowser: true 
         });
+    }
+    
+    if (savedModel) {
+        selectedModel = savedModel;
     }
 }
 
@@ -30,6 +37,16 @@ function checkFirstRun() {
 function showSetupModal() {
     const modal = document.getElementById('setupModal');
     if (modal) {
+        // Load current settings
+        const apiKey = localStorage.getItem('openai_api_key');
+        const model = localStorage.getItem('selected_model') || 'auto';
+        
+        const apiKeyInput = document.getElementById('setupApiKey');
+        const modelSelect = document.getElementById('modelSelect');
+        
+        if (apiKeyInput) apiKeyInput.value = apiKey || '';
+        if (modelSelect) modelSelect.value = model;
+        
         modal.style.display = 'flex';
     }
 }
@@ -70,18 +87,24 @@ function setupEventListeners() {
 
 function saveSetupApiKey() {
     const apiKey = document.getElementById('setupApiKey').value.trim();
+    const model = document.getElementById('modelSelect').value;
+    
     if (!apiKey) {
         alert('Please enter your OpenAI API key');
         return;
     }
     
     localStorage.setItem('openai_api_key', apiKey);
+    localStorage.setItem('selected_model', model);
+    
+    selectedModel = model;
     openai = new OpenAI({ 
         apiKey: apiKey,
         dangerouslyAllowBrowser: true 
     });
+    
     hideSetupModal();
-    alert('API key saved successfully!');
+    alert(`Settings saved successfully! Model: ${model === 'auto' ? 'Auto' : model}`);
 }
 
 async function selectFile() {
@@ -224,17 +247,35 @@ ${currentFile.content.substring(0, 4000)}${currentFile.content.length > 4000 ? '
 
 Please analyze this file and find the CTF challenge solution`;
 
-    const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-        ],
-        max_tokens: 1500,
-        temperature: 0.3
-    });
+    // Auto mode: try GPT-4 first, then fallback to GPT-3.5
+    const modelsToTry = selectedModel === 'auto' 
+        ? ['gpt-4', 'gpt-3.5-turbo'] 
+        : [selectedModel];
 
-    return completion.choices[0].message.content;
+    for (const model of modelsToTry) {
+        try {
+            console.log(`Trying model: ${model}`);
+            const completion = await openai.chat.completions.create({
+                model: model,
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: userPrompt }
+                ],
+                max_tokens: 1500,
+                temperature: 0.3
+            });
+
+            console.log(`Successfully used model: ${model}`);
+            return completion.choices[0].message.content;
+        } catch (error) {
+            console.log(`Model ${model} failed:`, error.message);
+            if (model === modelsToTry[modelsToTry.length - 1]) {
+                // Last model failed, throw the error
+                throw error;
+            }
+            // Continue to next model
+        }
+    }
 }
 
 function displayResult(result) {
