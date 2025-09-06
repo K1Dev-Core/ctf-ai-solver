@@ -11,7 +11,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      webSecurity: false
     },
     icon: path.join(__dirname, 'assets/icon.png'),
     titleBarStyle: 'hiddenInset',

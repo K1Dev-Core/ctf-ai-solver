@@ -13,7 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeApp() {
     const apiKey = localStorage.getItem('openai_api_key');
     if (apiKey) {
-        openai = new OpenAI({ apiKey: apiKey });
+        openai = new OpenAI({ 
+            apiKey: apiKey,
+            dangerouslyAllowBrowser: true 
+        });
     }
 }
 
@@ -25,27 +28,44 @@ function checkFirstRun() {
 }
 
 function showSetupModal() {
-    document.getElementById('setupModal').style.display = 'flex';
+    const modal = document.getElementById('setupModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
 }
 
 function hideSetupModal() {
-    document.getElementById('setupModal').style.display = 'none';
+    const modal = document.getElementById('setupModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
 function setupEventListeners() {
-    document.getElementById('saveSetupApiKey').addEventListener('click', saveSetupApiKey);
-    document.getElementById('settingsBtn').addEventListener('click', showSetupModal);
-    document.getElementById('selectFileBtn').addEventListener('click', selectFile);
-    document.getElementById('removeFile').addEventListener('click', removeFile);
-    document.getElementById('analyzeBtn').addEventListener('click', analyzeFile);
-    document.getElementById('copyResult').addEventListener('click', copyResult);
+    // Wait for DOM to be ready
+    setTimeout(() => {
+        const saveBtn = document.getElementById('saveSetupApiKey');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const selectBtn = document.getElementById('selectFileBtn');
+        const removeBtn = document.getElementById('removeFile');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const copyBtn = document.getElementById('copyResult');
+        const fileUploadArea = document.getElementById('fileUploadArea');
 
-    const fileUploadArea = document.getElementById('fileUploadArea');
-    
-    fileUploadArea.addEventListener('dragover', handleDragOver);
-    fileUploadArea.addEventListener('dragleave', handleDragLeave);
-    fileUploadArea.addEventListener('drop', handleDrop);
-    fileUploadArea.addEventListener('click', selectFile);
+        if (saveBtn) saveBtn.addEventListener('click', saveSetupApiKey);
+        if (settingsBtn) settingsBtn.addEventListener('click', showSetupModal);
+        if (selectBtn) selectBtn.addEventListener('click', selectFile);
+        if (removeBtn) removeBtn.addEventListener('click', removeFile);
+        if (analyzeBtn) analyzeBtn.addEventListener('click', analyzeFile);
+        if (copyBtn) copyBtn.addEventListener('click', copyResult);
+        
+        if (fileUploadArea) {
+            fileUploadArea.addEventListener('dragover', handleDragOver);
+            fileUploadArea.addEventListener('dragleave', handleDragLeave);
+            fileUploadArea.addEventListener('drop', handleDrop);
+            fileUploadArea.addEventListener('click', selectFile);
+        }
+    }, 100);
 }
 
 function saveSetupApiKey() {
@@ -56,7 +76,10 @@ function saveSetupApiKey() {
     }
     
     localStorage.setItem('openai_api_key', apiKey);
-    openai = new OpenAI({ apiKey: apiKey });
+    openai = new OpenAI({ 
+        apiKey: apiKey,
+        dangerouslyAllowBrowser: true 
+    });
     hideSetupModal();
     alert('API key saved successfully!');
 }
@@ -177,7 +200,7 @@ async function analyzeFile() {
 async function performCTFAnalysis() {
     const systemPrompt = `You are an expert CTF (Capture The Flag) solver with deep knowledge in:
 - Cryptography
-- Reverse Engineering
+- Reverse Engineering  
 - Web Security
 - Binary Analysis
 - Steganography
@@ -192,23 +215,23 @@ When given a file or data, analyze and find solutions for CTF challenges by:
 4. Providing possible answers or flags
 5. Explaining steps in detail
 
-Respond in English with clear, concise, and actionable solutions`;
+Respond in English with clear, concise, and actionable solutions. If the file is too large, focus on the most relevant parts.`;
 
     const userPrompt = `File: ${currentFile.name}
 Size: ${formatFileSize(currentFile.size)}
-Content:
-${currentFile.content}
+Content (first 4000 characters):
+${currentFile.content.substring(0, 4000)}${currentFile.content.length > 4000 ? '\n\n... (file truncated for analysis)' : ''}
 
 Please analyze this file and find the CTF challenge solution`;
 
     const completion = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-3.5-turbo",
         messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }
         ],
-        max_tokens: 2000,
-        temperature: 0.7
+        max_tokens: 1500,
+        temperature: 0.3
     });
 
     return completion.choices[0].message.content;
