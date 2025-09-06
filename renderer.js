@@ -212,7 +212,19 @@ async function analyzeFile() {
         const result = await performCTFAnalysis();
         displayResult(result);
     } catch (error) {
-        alert('Error during analysis: ' + error.message);
+        let errorMessage = 'Error during analysis: ';
+        
+        if (error.message.includes('429')) {
+            errorMessage = 'API Quota Exceeded!\n\nYour OpenAI API quota has been exceeded. Please:\n1. Check your billing details at https://platform.openai.com/account/billing\n2. Add payment method or upgrade your plan\n3. Wait for quota to reset\n\nTry again later or contact OpenAI support.';
+        } else if (error.message.includes('401')) {
+            errorMessage = 'Invalid API Key!\n\nPlease check your OpenAI API key:\n1. Go to https://platform.openai.com/api-keys\n2. Create a new API key\n3. Update your settings in this app';
+        } else if (error.message.includes('404')) {
+            errorMessage = 'Model Not Available!\n\nThe selected model is not available with your API key.\nPlease try a different model or check your OpenAI plan.';
+        } else {
+            errorMessage += error.message;
+        }
+        
+        alert(errorMessage);
     } finally {
         analyzeBtn.disabled = false;
         btnText.style.display = 'flex';
@@ -247,9 +259,9 @@ ${currentFile.content.substring(0, 4000)}${currentFile.content.length > 4000 ? '
 
 Please analyze this file and find the CTF challenge solution`;
 
-    // Auto mode: try GPT-4 first, then fallback to GPT-3.5
+    // Auto mode: try latest models first, then fallback to older ones
     const modelsToTry = selectedModel === 'auto' 
-        ? ['gpt-4', 'gpt-3.5-turbo'] 
+        ? ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo'] 
         : [selectedModel];
 
     for (const model of modelsToTry) {
@@ -269,6 +281,18 @@ Please analyze this file and find the CTF challenge solution`;
             return completion.choices[0].message.content;
         } catch (error) {
             console.log(`Model ${model} failed:`, error.message);
+            
+            // If it's a quota error, don't try other models
+            if (error.message.includes('429')) {
+                throw new Error('429 Quota exceeded');
+            }
+            
+            // If it's a model not found error, try next model
+            if (error.message.includes('404') && selectedModel === 'auto') {
+                console.log(`Model ${model} not available, trying next model...`);
+                continue;
+            }
+            
             if (model === modelsToTry[modelsToTry.length - 1]) {
                 // Last model failed, throw the error
                 throw error;

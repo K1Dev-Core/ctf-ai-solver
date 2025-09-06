@@ -36,11 +36,13 @@
                         </label>
                         <select id="modelSelect" class="model-select">
                             <option value="auto">Auto (Recommended)</option>
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-4o">GPT-4o (Latest)</option>
+                            <option value="gpt-4o-mini">GPT-4o Mini</option>
                             <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                         </select>
-                        <small>Auto mode will try GPT-4 first, then fallback to GPT-3.5</small>
+                        <small>Auto mode will try latest models first (GPT-4o → GPT-4o Mini → GPT-4 Turbo → GPT-4 → GPT-3.5). Check your OpenAI billing if you get quota errors.</small>
                     </div>
                     
                     <button id="saveSetupApiKey" class="setup-btn">
