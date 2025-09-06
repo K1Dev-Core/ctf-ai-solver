@@ -1,0 +1,482 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --vscode-bg: #1e1e1e;
+    --vscode-bg-secondary: #252526;
+    --vscode-bg-tertiary: #2d2d30;
+    --vscode-border: #3c3c3c;
+    --vscode-text: #cccccc;
+    --vscode-text-secondary: #969696;
+    --vscode-accent: #007acc;
+    --vscode-accent-hover: #005a9e;
+    --vscode-success: #4ec9b0;
+    --vscode-warning: #dcdcaa;
+    --vscode-error: #f44747;
+    --vscode-button: #0e639c;
+    --vscode-button-hover: #005a9e;
+    --vscode-input-bg: #3c3c3c;
+    --vscode-input-border: #6a6a6a;
+    --vscode-shadow: rgba(0, 0, 0, 0.2);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: var(--vscode-bg);
+    min-height: 100vh;
+    color: var(--vscode-text);
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--vscode-bg-secondary);
+    border: 1px solid var(--vscode-border);
+    box-shadow: 0 2px 8px var(--vscode-shadow);
+    overflow: hidden;
+}
+
+/* Setup Modal */
+.setup-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.setup-content {
+    background: var(--vscode-bg-tertiary);
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 16px var(--vscode-shadow);
+    animation: slideIn 0.3s ease-out;
+    border: 1px solid var(--vscode-border);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.setup-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.setup-header i {
+    font-size: 48px;
+    color: var(--vscode-accent);
+    margin-bottom: 15px;
+}
+
+.setup-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--vscode-text);
+    margin-bottom: 8px;
+}
+
+.setup-header p {
+    color: var(--vscode-text-secondary);
+    font-size: 16px;
+}
+
+.setup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--vscode-text);
+    font-size: 14px;
+}
+
+.input-group label i {
+    color: var(--vscode-accent);
+}
+
+.input-group input {
+    padding: 12px 16px;
+    border: 1px solid var(--vscode-input-border);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+    background: var(--vscode-input-bg);
+    color: var(--vscode-text);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--vscode-accent);
+    box-shadow: 0 0 0 1px var(--vscode-accent);
+}
+
+.input-group small {
+    color: var(--vscode-text-secondary);
+    font-size: 12px;
+}
+
+.setup-btn {
+    padding: 14px 24px;
+    background: var(--vscode-button);
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.setup-btn:hover {
+    background: var(--vscode-button-hover);
+}
+
+.header {
+    background: var(--vscode-bg-tertiary);
+    color: var(--vscode-text);
+    padding: 20px 30px;
+    box-shadow: 0 2px 10px var(--vscode-shadow);
+    border-bottom: 1px solid var(--vscode-border);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo i {
+    font-size: 24px;
+    color: var(--vscode-success);
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-btn {
+    padding: 10px;
+    background: var(--vscode-bg);
+    color: var(--vscode-text);
+    border: 1px solid var(--vscode-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-btn:hover {
+    background: var(--vscode-accent);
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.file-upload-area {
+    border: 2px dashed var(--vscode-border);
+    padding: 60px 40px;
+    text-align: center;
+    background: var(--vscode-bg);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: var(--vscode-accent);
+    background: var(--vscode-bg-tertiary);
+}
+
+.file-upload-area.dragover {
+    border-color: var(--vscode-accent);
+    background: var(--vscode-bg-tertiary);
+}
+
+.upload-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    opacity: 0.6;
+    color: var(--vscode-accent);
+}
+
+.file-upload-area h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--vscode-text);
+}
+
+.file-upload-area p {
+    color: var(--vscode-text-secondary);
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.select-file-btn {
+    padding: 12px 24px;
+    background: var(--vscode-button);
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto;
+}
+
+.select-file-btn:hover {
+    background: var(--vscode-button-hover);
+}
+
+.file-info {
+    background: var(--vscode-bg);
+    border: 1px solid var(--vscode-border);
+    padding: 20px;
+    box-shadow: 0 1px 4px var(--vscode-shadow);
+}
+
+.file-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.file-icon {
+    font-size: 24px;
+    color: var(--vscode-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 122, 204, 0.1);
+}
+
+.file-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.file-name {
+    font-weight: 500;
+    color: var(--vscode-text);
+    font-size: 16px;
+}
+
+.file-size {
+    color: var(--vscode-text-secondary);
+    font-size: 14px;
+}
+
+.remove-btn {
+    background: var(--vscode-error);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+    background: #d32f2f;
+}
+
+.analysis-section {
+    text-align: center;
+}
+
+.analyze-btn {
+    padding: 16px 32px;
+    background: var(--vscode-button);
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 200px;
+}
+
+.analyze-btn:hover {
+    background: var(--vscode-button-hover);
+}
+
+.analyze-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.result-section {
+    background: var(--vscode-bg);
+    padding: 25px;
+    border: 1px solid var(--vscode-border);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--vscode-border);
+}
+
+.result-header h3 {
+    color: var(--vscode-text);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.copy-btn {
+    padding: 8px 16px;
+    background: var(--vscode-accent);
+    color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.copy-btn:hover {
+    background: var(--vscode-accent-hover);
+}
+
+.result-content {
+    background: var(--vscode-bg-tertiary);
+    padding: 20px;
+    border: 1px solid var(--vscode-border);
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    max-height: 400px;
+    overflow-y: auto;
+    color: var(--vscode-text);
+}
+
+.footer {
+    background: var(--vscode-bg-tertiary);
+    padding: 20px 30px;
+    text-align: center;
+    color: var(--vscode-text-secondary);
+    border-top: 1px solid var(--vscode-border);
+}
+
+.footer p {
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .main-content {
+        padding: 20px 15px;
+    }
+    
+    .file-upload-area {
+        padding: 40px 20px;
+    }
+    
+    .app-container {
+        margin: 0;
+        max-width: 100%;
+    }
+}

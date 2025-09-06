@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF AI Solver</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Setup Modal -->
+        <div class="setup-modal" id="setupModal">
+            <div class="setup-content">
+                <div class="setup-header">
+                    <i class="fas fa-cog"></i>
+                    <h2>Welcome to CTF AI Solver</h2>
+                    <p>Configure your OpenAI API key to get started</p>
+                </div>
+                <div class="setup-form">
+                    <div class="input-group">
+                        <label for="setupApiKey">
+                            <i class="fas fa-key"></i>
+                            OpenAI API Key
+                        </label>
+                        <input type="password" id="setupApiKey" placeholder="Enter your OpenAI API key" />
+                        <small>Your API key is stored locally and never shared</small>
+                    </div>
+                    <button id="saveSetupApiKey" class="setup-btn">
+                        <i class="fas fa-save"></i>
+                        Save & Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h1>CTF AI Solver</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="settingsBtn" class="settings-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="file-upload-area" id="fileUploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3>Drop files here or click to select</h3>
+                <p>Supports all file types: text, images, archives, code files</p>
+                <button id="selectFileBtn" class="select-file-btn">
+                    <i class="fas fa-folder-open"></i>
+                    Choose File
+                </button>
+            </div>
+
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <div class="file-details">
+                    <div class="file-icon">
+                        <i class="fas fa-file"></i>
+                    </div>
+                    <div class="file-meta">
+                        <span class="file-name" id="fileName"></span>
+                        <span class="file-size" id="fileSize"></span>
+                    </div>
+                    <button id="removeFile" class="remove-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="analysis-section" id="analysisSection" style="display: none;">
+                <button id="analyzeBtn" class="analyze-btn">
+                    <span class="btn-text">
+                        <i class="fas fa-brain"></i>
+                        Analyze & Solve Challenge
+                    </span>
+                    <span class="loading-spinner" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <div class="result-header">
+                    <h3>
+                        <i class="fas fa-chart-line"></i>
+                        Analysis Results
+                    </h3>
+                    <button id="copyResult" class="copy-btn">
+                        <i class="fas fa-copy"></i>
+                        Copy
+                    </button>
+                </div>
+                <div class="result-content" id="resultContent"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Powered by ChatGPT API | CTF Challenge Solver</p>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>

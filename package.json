@@ -1,0 +1,20 @@
+{
+  "name": "ctf-ai-solver",
+  "version": "1.0.0",
+  "description": "AI-powered CTF challenge solver using ChatGPT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "keywords": ["ctf", "ai", "chatgpt", "electron"],
+  "author": "CTF AI Solver",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^27.0.0",
+    "openai": "^4.20.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.6.4"
+  }
+}
